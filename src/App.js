@@ -6,7 +6,7 @@ import DayExpanded from './DayExpanded';
 function App() {
   const [selectedDay, setSelectedDay] = useState(null);
 
-  const weekDays = [
+  const [weekDays, setWeekDays] = useState ([
     {
       date: "Monday",
       tasks: [
@@ -88,30 +88,70 @@ function App() {
       date: "Sunday",
       tasks: [],
     },
-  ];
+  ]);
   
 
   const handleDayClick = (day) => {
     setSelectedDay(day);
   };
 
+  const addTask = (day, newTask) => {
+   
+    const updatedDay = { ...day };
+
+    updatedDay.tasks.push(newTask);
+
+    const updatedWeekDays = [...weekDays];
+
+    const dayIndex = updatedWeekDays.findIndex((d) => d.date === updatedDay.date);
+
+    if (dayIndex !== -1) {
+      
+      updatedWeekDays[dayIndex] = updatedDay;
+
+      setWeekDays(updatedWeekDays);
+    }
+  };
+  
+  const removeTask = (day, index) => {
+    const updatedDay = { ...day };
+    updatedDay.tasks.splice(index, 1);
+    const dayIndex = weekDays.findIndex((d) => d.date === updatedDay.date);
+  
+    if (dayIndex !== -1) {
+      const updatedWeekDays = [...weekDays];
+  
+      updatedWeekDays[dayIndex] = updatedDay;
+      setWeekDays(updatedWeekDays);
+    }
+  };
+  
+
   return (
     <div className="App">
       <div className="container">
         <div className="row">
           <div className="col-md-3">
-            <Week days={weekDays} onDayClick={handleDayClick} />
+            <Week
+              days={weekDays}
+              onDayClick={handleDayClick}
+              activeDay={selectedDay}
+              onAddTask={addTask}
+              onRemoveTask={removeTask}
+            />
           </div>
           <div className="col-md-9">
             <h1 className="mt-4">Planner</h1>
-            <p className="mt-4">Click on the day to see details </p>
-            {selectedDay && <DayExpanded day={selectedDay} />}
+            <p className="mt-4">Click on the day to see details</p>
+            <p className="mt-4">You can add a task if the entire form is filled out.</p>
+            {selectedDay && (
+              <DayExpanded day={selectedDay} onAddTask={addTask} onRemoveTask={removeTask} />
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 }
+
 export default App;
-
-

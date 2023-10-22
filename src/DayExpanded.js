@@ -1,18 +1,31 @@
 import React from 'react';
-import NewTaskForm from './NewTaskForm';
 import Task from './Task';
+import NewTaskForm from './NewTaskForm';
 
-
-const DayExpanded = ({ day }) => {
+const DayExpanded = ({ day, onAddTask, onRemoveTask, isCommonSchedule }) => {
   return (
     <div className="day-expanded">
       <h3>{day.date}</h3>
-      {day.tasks.map((task, index) => (
-        <Task key={index} task={task} />
-      ))}
-      <NewTaskForm />
+      <NewTaskForm onAddTask={onAddTask} day={day} />
+      <div className="task-list">
+        {day.tasks.length > 0 ? (
+          day.tasks.map((task, index) => (
+            <div key={index} className="task">
+              <Task task={task} />
+              {isCommonSchedule ? null : ( 
+                <button className="btn btn-danger" onClick={() => onRemoveTask(day, index)}>
+                  Remove
+                </button>
+              )}
+            </div>
+          ))
+        ) : (
+          <p>No tasks planned for this day.</p>
+        )}
+      </div>
     </div>
   );
 };
 
 export default DayExpanded;
+

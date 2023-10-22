@@ -91,9 +91,14 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s;
-  margin-top: 10px;
+  margin-top: 10px  ;
 }
 
 .btn-success:hover {
   background-color: #1e7e34;
+}
+.active {
+   
+  color: #9d4040; 
+  
 }
